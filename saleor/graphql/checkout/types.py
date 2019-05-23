@@ -6,6 +6,7 @@ from ...checkout import models
 from ...core.utils.taxes import get_taxes_for_address
 from ..core.connection import CountableDjangoObjectType
 from ..core.types.money import TaxedMoney
+from ..giftcard.types import GiftCard
 from ..order.utils import applicable_shipping_methods
 from ..payment.enums import PaymentGatewayEnum
 from ..shipping.types import ShippingMethod
@@ -47,6 +48,10 @@ class Checkout(CountableDjangoObjectType):
         required=True,
     )
     email = graphene.String(description="Email of a customer", required=True)
+    gift_cards = gql_optimizer.field(
+        graphene.List(GiftCard, description="List of userd gift cards"),
+        model_field="gift_cards",
+    )
     is_shipping_required = graphene.Boolean(
         description="Returns True, if checkout requires shipping.", required=True
     )
@@ -82,6 +87,7 @@ class Checkout(CountableDjangoObjectType):
             "created",
             "discount_amount",
             "discount_name",
+            "gift_cards",
             "is_shipping_required",
             "last_change",
             "note",
@@ -120,6 +126,9 @@ class Checkout(CountableDjangoObjectType):
 
     def resolve_available_payment_gateways(self, _info):
         return settings.CHECKOUT_PAYMENT_GATEWAYS.keys()
+
+    def resolve_gift_cards(self, _info):
+        return self.gift_cards.all()
 
     def resolve_is_shipping_required(self, _info):
         return self.is_shipping_required()
