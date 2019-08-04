@@ -2,7 +2,8 @@ from decimal import Decimal
 from uuid import uuid4
 
 from django.conf import settings
-from django.contrib.postgres.fields import HStoreField, JSONField
+# from django.contrib.postgres.fields import HStoreField, JSONField
+from django_mysql.forms import JSONField
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.urls import reverse
@@ -35,7 +36,8 @@ class Category(MPTTModel, SeoModel):
     name = models.CharField(max_length=128)
     slug = models.SlugField(max_length=128)
     description = models.TextField(blank=True)
-    description_json = JSONField(blank=True, default=dict)
+    # description_json = JSONField(blank=True, default=dict)
+    description_json = JSONField()
     parent = models.ForeignKey(
         "self", null=True, blank=True, related_name="children", on_delete=models.CASCADE
     )
@@ -64,7 +66,8 @@ class CategoryTranslation(SeoModelTranslation):
     )
     name = models.CharField(max_length=128)
     description = models.TextField(blank=True)
-    description_json = JSONField(blank=True, default=dict)
+    # description_json = JSONField(blank=True, default=dict)
+    description_json = JSONField()
 
     class Meta:
         unique_together = (("language_code", "category"),)
@@ -114,7 +117,8 @@ class Product(SeoModel, PublishableModel):
     )
     name = models.CharField(max_length=128)
     description = models.TextField(blank=True)
-    description_json = JSONField(blank=True, default=dict)
+    # description_json = JSONField(blank=True, default=dict)
+    description_json = JSONField()
     category = models.ForeignKey(
         Category, related_name="products", on_delete=models.CASCADE
     )
@@ -123,7 +127,8 @@ class Product(SeoModel, PublishableModel):
         max_digits=settings.DEFAULT_MAX_DIGITS,
         decimal_places=settings.DEFAULT_DECIMAL_PLACES,
     )
-    attributes = HStoreField(default=dict, blank=True)
+    # attributes = HStoreField(default=dict, blank=True)
+    attributes = JSONField()
     updated_at = models.DateTimeField(auto_now=True, null=True)
     charge_taxes = models.BooleanField(default=True)
     tax_rate = models.CharField(max_length=128, blank=True, choices=TaxRateType.CHOICES)
@@ -200,7 +205,8 @@ class ProductTranslation(SeoModelTranslation):
     )
     name = models.CharField(max_length=128)
     description = models.TextField(blank=True)
-    description_json = JSONField(blank=True, default=dict)
+    # description_json = JSONField(blank=True, default=dict)
+    description_json = JSONField()
 
     class Meta:
         unique_together = (("language_code", "product"),)
@@ -231,7 +237,8 @@ class ProductVariant(models.Model):
     product = models.ForeignKey(
         Product, related_name="variants", on_delete=models.CASCADE
     )
-    attributes = HStoreField(default=dict, blank=True)
+    # attributes = HStoreField(default=dict, blank=True)
+    attributes = JSONField()
     images = models.ManyToManyField("ProductImage", through="VariantImage")
     track_inventory = models.BooleanField(default=True)
     quantity = models.IntegerField(
@@ -542,7 +549,8 @@ class Collection(SeoModel, PublishableModel):
     )
     background_image_alt = models.CharField(max_length=128, blank=True)
     description = models.TextField(blank=True)
-    description_json = JSONField(blank=True, default=dict)
+    # description_json = JSONField(blank=True, default=dict)
+    description_json = JSONField()
 
     translated = TranslationProxy()
 
@@ -563,7 +571,8 @@ class CollectionTranslation(SeoModelTranslation):
     )
     name = models.CharField(max_length=128)
     description = models.TextField(blank=True)
-    description_json = JSONField(blank=True, default=dict)
+    # description_json = JSONField(blank=True, default=dict)
+    description_json = JSONField()
 
     class Meta:
         unique_together = (("language_code", "collection"),)

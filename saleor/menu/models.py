@@ -1,4 +1,5 @@
-from django.contrib.postgres.fields import JSONField
+# from django.contrib.postgres.fields import JSONField
+from django_mysql.forms import JSONField
 from django.db import models
 from django.utils.translation import pgettext_lazy
 from mptt.managers import TreeManager
@@ -12,7 +13,8 @@ from ..product.models import Category, Collection
 
 class Menu(models.Model):
     name = models.CharField(max_length=128)
-    json_content = JSONField(blank=True, default=dict)
+    # json_content = JSONField(blank=True, default=dict)
+    json_content = JSONField()
 
     class Meta:
         ordering = ("pk",)

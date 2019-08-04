@@ -53,7 +53,7 @@ DATABASES = {
         default="postgres://saleor:saleor@localhost:5432/saleor", conn_max_age=600
     ),
     "default": dj_database_url.config(
-        default="mysql://prisma:prisma@localhost:3306/tshirtshop", conn_max_age=600
+        default="mysql://prisma:prisma@localhost:3306/tshirtshop_temp", conn_max_age=600
     )
 }
 
@@ -262,6 +262,7 @@ INSTALLED_APPS = [
     "django_countries",
     "django_filters",
     "django_celery_results",
+    "django_mysql",
     "impersonate",
     "phonenumber_field",
     "captcha",

@@ -1,4 +1,5 @@
-from django.contrib.postgres.fields import JSONField
+# from django.contrib.postgres.fields import JSONField
+from django_mysql.forms import JSONField
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import pgettext_lazy
@@ -19,7 +20,8 @@ class Page(SeoModel, PublishableModel):
     slug = models.SlugField(unique=True, max_length=100)
     title = models.CharField(max_length=200)
     content = models.TextField(blank=True)
-    content_json = JSONField(blank=True, default=dict)
+    # content_json = JSONField(blank=True, default=dict)
+    content_json = JSONField()
     created = models.DateTimeField(auto_now_add=True)
 
     objects = PagePublishedQuerySet.as_manager()
@@ -48,7 +50,8 @@ class PageTranslation(SeoModelTranslation):
     )
     title = models.CharField(max_length=255, blank=True)
     content = models.TextField(blank=True)
-    content_json = JSONField(blank=True, default=dict)
+    # content_json = JSONField(blank=True, default=dict)
+    content_json = JSONField()
 
     class Meta:
         unique_together = (("language_code", "page"),)

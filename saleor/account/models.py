@@ -6,7 +6,8 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin,
 )
-from django.contrib.postgres.fields import JSONField
+# from django.contrib.postgres.fields import JSONField
+from django_mysql.models import JSONField
 from django.db import models
 from django.db.models import Q, Value
 from django.forms.models import model_to_dict
@@ -215,7 +216,8 @@ class CustomerEvent(models.Model):
     )
 
     order = models.ForeignKey("order.Order", on_delete=models.SET_NULL, null=True)
-    parameters = JSONField(blank=True, default=dict, encoder=CustomJsonEncoder)
+    # parameters = JSONField(blank=True, default=dict, encoder=CustomJsonEncoder)
+    parameters = JSONField()
 
     user = models.ForeignKey(User, related_name="events", on_delete=models.CASCADE)
 
